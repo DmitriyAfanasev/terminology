@@ -35,11 +35,11 @@ uv run python manage.py seed_demo         # командой можно созд
 uv run python manage.py runserver         # WSGI-сервер в режиме разработки
 ```
 
-| Что                  | Адрес                          |
-|----------------------|--------------------------------|
-| Админ-панель         | http://127.0.0.1:8000/admin/   |
-| Swagger              | http://127.0.0.1:8000/swagger/ |
-| ReDoc                | http://127.0.0.1:8000/redoc/   |
+| Что                  | Адрес                              |
+|----------------------|------------------------------------|
+| Админ-панель         | http://127.0.0.1:8000/admin/       |
+| Swagger              | http://127.0.0.1:8000/api/swagger/ |
+| ReDoc                | http://127.0.0.1:8000/api/redoc/   |
 
 ## Разработка
 
@@ -51,7 +51,7 @@ uv run ruff format .           # форматирование
 
 ## API
 
-### `GET /refbooks/[?date=ГГГГ-ММ-ДД]` — список справочников
+### `GET /api/refbooks/[?date=ГГГГ-ММ-ДД]` — список справочников
 
 Без `date` — все справочники. С `date` — только те, у которых есть версия с датой начала
 действия ≤ указанной.
@@ -68,7 +68,7 @@ uv run ruff format .           # форматирование
 }
 ```
 
-### `GET /refbooks/<id>/elements[?version=<версия>]` — элементы справочника
+### `GET /api/refbooks/<id>/elements[?version=<версия>]` — элементы справочника
 
 Без `version` — элементы **текущей** версии (самая поздняя дата начала, но не позже сегодня).
 
@@ -83,7 +83,7 @@ uv run ruff format .           # форматирование
 }
 ```
 
-### `GET /refbooks/<id>/check_element?code=<код>&value=<значение>[&version=<версия>]`
+### `GET /api/refbooks/<id>/check_element?code=<код>&value=<значение>[&version=<версия>]`
 
 Проверяет, что элемент с таким кодом **и** значением есть в версии (по умолчанию — в текущей).
 
@@ -103,9 +103,9 @@ uv run ruff format .           # форматирование
 Тело ошибки — стандартная модель DRF: `{"detail": "..."}`.
 
 ```bash
-curl "http://127.0.0.1:8000/refbooks/?date=2022-10-01"
-curl "http://127.0.0.1:8000/refbooks/1/elements?version=1.0"
-curl "http://127.0.0.1:8000/refbooks/1/check_element?code=3&value=Хирург&version=1.0"
+curl "http://127.0.0.1:8000/api/refbooks/?date=2022-10-01"
+curl "http://127.0.0.1:8000/api/refbooks/1/elements?version=1.0"
+curl "http://127.0.0.1:8000/api/refbooks/1/check_element?code=3&value=Хирург&version=1.0"
 ```
 
 ## Админ-панель
