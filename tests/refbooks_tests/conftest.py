@@ -6,6 +6,7 @@ from django.utils import timezone
 
 from refbooks.models import Refbook, RefbookElement, RefbookVersion
 
+
 @dataclass(frozen=True, slots=True)
 class SeedData:
     ms: Refbook

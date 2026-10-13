@@ -1,9 +1,6 @@
 from os import environ
 from pathlib import Path
 
-from dmr.openapi import OpenAPIConfig
-from dmr.settings import Settings as DMRSettings
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = environ.get("SECRET_KEY", "8i9ZxGXl14lJsT7+Ca6nm9AoTvsc7kePibJ62nmGons=")
@@ -18,7 +15,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # Сторонние библиотеки
-    "dmr",
+    "rest_framework",
+    "drf_spectacular",
     # Приложения проекта
     "refbooks",
     "api",
@@ -78,13 +76,15 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-DMR_SETTINGS = {
-    DMRSettings.openapi_config: OpenAPIConfig(
-        title="Сервис терминологии (DMR)",
-        version="0.0.1",
-        description=(
-            "REST API сервиса терминологии: справочники, их версии и элементы.\n\n"
-            "Асинхронная реализация на django-modern-rest (pydantic)."
-        ),
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Сервис терминологии",
+    "VERSION": "0.0.1",
+    "DESCRIPTION": (
+        "REST API сервиса терминологии: справочники, их версии и элементы.\n\n"
     ),
+    "SERVE_INCLUDE_SCHEMA": False,
 }

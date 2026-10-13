@@ -3,9 +3,8 @@ from http import HTTPStatus
 from urllib.parse import urlencode
 
 import pytest
-from django.test import AsyncClient, Client
+from django.test import Client
 
-from refbooks.models import Refbook, RefbookElement, RefbookVersion
 from .conftest import SeedData
 
 
@@ -218,21 +217,3 @@ def test_check_element_unknown_version_is_not_found(
     response = client.get(url)
 
     assert response.status_code == HTTPStatus.NOT_FOUND
-
-
-@pytest.mark.django_db(transaction=True)
-async def test_async_client_end_to_end(async_client: AsyncClient, api_prefix: str) -> None:
-    refbook = await Refbook.objects.acreate(code="ASYNC", name="Async")
-    version = await RefbookVersion.objects.acreate(
-        refbook=refbook, version="1", start_date=dt.date(2020, 1, 1)
-    )
-    await RefbookElement.objects.acreate(version=version, code="a", value="b")
-
-    elements = await async_client.get(f"{api_prefix}/refbooks/{refbook.pk}/elements")
-    check = await async_client.get(
-        check_url(api_prefix, refbook.pk, code="a", value="b"),
-    )
-
-    assert elements.status_code == HTTPStatus.OK
-    assert elements.json() == {"elements": [{"code": "a", "value": "b"}]}
-    assert check.json() == {"valid": True}

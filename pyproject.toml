@@ -1,19 +1,19 @@
 [project]
 name = "terminology"
 version = "1.0.0"
-description = "Сервис терминологии: справочники, версии, элементы. Django 6 + django-modern-rest (async)."
+description = "Сервис терминологии: справочники, версии, элементы. Django 6 + DRF (sync)."
 requires-python = ">=3.12"
 dependencies = [
     "django>=6.0,<6.2",
-    "django-modern-rest[pydantic,openapi]>=0.16",
-    "uvicorn>=0.30",
+    "djangorestframework>=3.15",
+    "djangorestframework-stubs>=3.18.1",
+    "drf-spectacular>=0.27",
 ]
 
 [dependency-groups]
 dev = [
     "pytest>=8",
     "pytest-django>=4.9",
-    "pytest-asyncio>=0.24",
     "ruff>=0.8",
 ]
 
@@ -23,7 +23,6 @@ package = false
 [tool.pytest.ini_options]
 DJANGO_SETTINGS_MODULE = "config.settings"
 python_files = ["test_*.py"]
-asyncio_mode = "auto"
 addopts = "-q"
 
 [tool.ruff]

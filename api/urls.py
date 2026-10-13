@@ -1,33 +1,25 @@
 from django.urls import path
-from dmr.openapi import build_schema
-from dmr.openapi.views import OpenAPIJsonView, RedocView, SwaggerView
-from dmr.routing import Router
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
-from . import controllers
-
-router = Router(
-    "api/",
-    [
-        path("refbooks/", controllers.RefbookListController.as_view(), name="refbook-list"),
-        path(
-            "refbooks/<int:refbook_id>/elements",
-            controllers.ElementListController.as_view(),
-            name="refbook-elements",
-        ),
-        path(
-            "refbooks/<int:refbook_id>/check_element",
-            controllers.CheckElementController.as_view(),
-            name="refbook-check-element",
-        ),
-    ],
-    tags=["Справочники"],
-)
-
-schema = build_schema(router)
+from api import views
 
 urlpatterns = [
-    router.to_urlpatterns(namespace="api"),
-    path("openapi.json/", OpenAPIJsonView.as_view(schema=schema), name="dmr-openapi"),
-    path("swagger/", SwaggerView.as_view(schema=schema), name="dmr-swagger"),
-    path("redoc/", RedocView.as_view(schema=schema), name="dmr-redoc"),
+    path(
+        "refbooks/",
+        views.RefbookListView.as_view(),
+        name="refbook-list",
+    ),
+    path(
+        "refbooks/<int:refbook_id>/elements",
+        views.ElementListView.as_view(),
+        name="refbook-elements",
+    ),
+    path(
+        "refbooks/<int:refbook_id>/check_element",
+        views.CheckElementView.as_view(),
+        name="refbook-check-element",
+    ),
+    path("schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("swagger/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger"),
+    path("redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
 ]

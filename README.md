@@ -4,9 +4,9 @@
 документами: справочники → версии → элементы. REST API + админ-панель на русском языке.
 
 * **Django 6**, SQLite, Python ≥ 3.12 (этого требует сам Django 6)
-* **Асинхронный** (ASGI): доступ к БД — через async ORM (`aget`, `afirst`, `aexists`, `async for`)
-* REST API — **[django-modern-rest](https://github.com/wemake-services/django-modern-rest)** (async-контроллеры,
-  pydantic), OpenAPI/Swagger
+* **Синхронный** (WSGI): стандартный Django ORM
+* REST API — **[Django REST Framework](https://www.django-rest-framework.org/)** +
+  **[drf-spectacular](https://drf-spectacular.readthedocs.io/)**, OpenAPI/Swagger/ReDoc
 * Менеджер пакетов — **uv**, линтер и форматтер — **ruff**
 
 ## Быстрый старт
@@ -39,7 +39,7 @@ uv run python manage.py runserver         # WSGI-сервер в режиме р
 |----------------------|--------------------------------|
 | Админ-панель         | http://127.0.0.1:8000/admin/   |
 | Swagger              | http://127.0.0.1:8000/swagger/ |
-| ReDoc / OpenAPI JSON | `/redoc/`, `/openapi.json/`    |
+| ReDoc                | http://127.0.0.1:8000/redoc/   |
 
 ## Разработка
 
@@ -100,7 +100,7 @@ uv run ruff format .           # форматирование
 | 400 | неверная дата, не переданы `code`/`value`                                 |
 | 404 | справочник не найден; версия не найдена; у справочника нет текущей версии |
 
-Тело ошибки — стандартная модель django-modern-rest: `{"detail": [{"msg": ..., "type": ...}]}`.
+Тело ошибки — стандартная модель DRF: `{"detail": "..."}`.
 
 ```bash
 curl "http://127.0.0.1:8000/refbooks/?date=2022-10-01"
